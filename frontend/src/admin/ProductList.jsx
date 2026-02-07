@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 export default function ProductList() {
   const [products, setProducts] = useState([]);
