@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function EditProduct() {
   const { id } = useParams();
@@ -14,20 +14,34 @@ export default function EditProduct() {
     image: "",
     stock: "",
   });
-  const allowedFields = ["title", "price", "description", "category", "image", "stock"];
 
-  const loadProduct = async () => {
-    const res = await api.get("/products");
-    const product = res.data.find((p) => p._id === id);
-    setForm(product);
-  };
+  const allowedFields = [
+    "title",
+    "price",
+    "description",
+    "category",
+    "image",
+    "stock",
+  ];
 
   useEffect(() => {
+    const loadProduct = async () => {
+      try {
+        const res = await api.get(`/products/${id}`); // ✅ single product
+        setForm(res.data);
+      } catch (err) {
+        console.error("Error loading product:", err);
+      }
+    };
+
     loadProduct();
-  }, []);
+  }, [id]);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -46,7 +60,7 @@ export default function EditProduct() {
           <input
             key={key}
             name={key}
-            value={form[key]}
+            value={form[key] || ""}
             onChange={handleChange}
             placeholder={key}
             className="w-full border px-3 py-2 rounded"
