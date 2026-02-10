@@ -11,6 +11,7 @@ import { Outlet } from "react-router";
 import Cart from "./pages/Cart";
 import CheckoutAddress from "./pages/CheckoutAddress";
 import Checkout from "./pages/Checkout";
+import OrderSuccess from "./pages/OrderSuccess";
 
 
 function Layout() {
@@ -37,7 +38,7 @@ const router = createBrowserRouter([
       { path: "/admin/products/edit/:id", element: <EditProduct /> },
       { path: "/checkout-address", element: <CheckoutAddress /> },
       { path: "/checkout", element: <Checkout /> },
-      
+      { path: "/order-success/:id", element: <OrderSuccess /> },
 
   ],  
   }

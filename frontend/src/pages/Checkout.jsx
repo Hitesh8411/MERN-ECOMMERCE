@@ -3,23 +3,27 @@ import api from "../api/axios";
 import { useNavigate } from "react-router";
 
 export default function Checkout() {
-  const navigate = useNavigate();
+ 
   const userId = localStorage.getItem("userId");
 
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [cart, setCart] = useState(null);
+  const navigate = useNavigate();
 
   // Load cart + addresses
   useEffect(() => {
-    if (!userId) return;
+    if (!userId) {
+      navigate("/login");
+      return; 
+    }
 
     api.get(`/cart/${userId}`).then((res) => setCart(res.data));
     api.get(`/address/${userId}`).then((res) => {
       setAddresses(res.data);
       setSelectedAddress(res.data[0]); // default select
     });
-  }, [userId]);
+  }, [navigate, userId]);
 
   if (!cart) return <div className="p-6">Loading...</div>;
 
@@ -28,7 +32,7 @@ export default function Checkout() {
     0
   );
 
-  // ✅ PLACE ORDER + CLEAR CART
+  // PLACE ORDER + CLEAR CART //last part
   const placeOrder = async () => {
     if (!selectedAddress) {
       alert("Please select address");
